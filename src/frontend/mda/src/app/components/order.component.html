@@ -1,0 +1,15 @@
+<div>
+  <h2>Commande {{ order?.orderId }}</h2>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="order">
+    <p>Statut: {{ order.status }}</p>
+    <p>Total: {{ order.total }} €</p>
+    <p>Date: {{ order.date }}</p>
+    <ul>
+      <li *ngFor="let p of order.products">
+        {{ p.name }} - {{ p.price }} €
+      </li>
+    </ul>
+    <button *ngIf="order.status === 'confirmed'" (click)="pay()">Payer</button>
+  </div>
+</div>

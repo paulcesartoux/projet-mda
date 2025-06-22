@@ -1,0 +1,9 @@
+<div>
+  <h2>Panier</h2>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="cart">
+    <p>Items: {{ cart.itemsCount }}</p>
+    <p>Total: {{ cart.total }} €</p>
+    <button (click)="checkout()">Commander</button>
+  </div>
+</div>

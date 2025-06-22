@@ -1,0 +1,10 @@
+<div>
+  <h2>Produits</h2>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <ul>
+    <li *ngFor="let product of products">
+      {{ product.name }} - {{ product.price }} €
+      <button (click)="addToCart(product.id)">Ajouter au panier</button>
+    </li>
+  </ul>
+</div>
