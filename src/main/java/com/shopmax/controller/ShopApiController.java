@@ -4,282 +4,109 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.shopmax.model.Order;
-import com.shopmax.model.Payment;
-import com.shopmax.model.Product;
-import com.shopmax.model.ProductCatalog;
-import com.shopmax.model.ShoppingCart;
-import com.shopmax.model.UserConstants;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import io.javalin.Javalin;
-import io.javalin.http.Context;
+import io.swagger.v3.oas.annotations.Parameter;
 
-/**
- * Contrôleur API unique pour gérer le panier, les commandes et les paiements
- */
+@RestController
+@RequestMapping("/api")
 public class ShopApiController {
+    private static final List<Map<String, Object>> products = new ArrayList<>();
+    private static final List<Map<String, Object>> users = new ArrayList<>();
+    private static final Map<Integer, List<Map<String, Object>>> carts = new HashMap<>();
+    private static final Map<Integer, Map<String, Object>> orders = new HashMap<>();
+    private static int cartIdSeq = 1;
+    private static int orderIdSeq = 1;
+    private static int paymentIdSeq = 1;
 
-    // Stockage en mémoire (simule une base de données)
-    private static final Map<Integer, ShoppingCart> carts = new HashMap<>();
-    private static final Map<Integer, Order> orders = new HashMap<>();
-    private static final Map<Integer, Payment> payments = new HashMap<>();
-    
-    private static final AtomicInteger cartIdGenerator = new AtomicInteger(1);
-    private static final AtomicInteger orderIdGenerator = new AtomicInteger(1);
-    private static final AtomicInteger paymentIdGenerator = new AtomicInteger(1);
-
-    public static void main(String[] args) {
-        // Démarrage simple de Javalin avec CORS et logs dev
-        Javalin app = Javalin.create(config -> {
-            config.plugins.enableCors(cors -> cors.add(corsConfig -> corsConfig.anyHost()));
-            config.plugins.enableDevLogging();
-        }).start(8080);
-
-        // Routes API
-        setupRoutes(app);
-        
-        System.out.println("API démarrée sur http://localhost:8080");
-        System.out.println("Documentation Swagger désactivée");
-        System.out.println("Endpoints disponibles:");
-        System.out.println("- GET /api/products - Liste des produits");
-        System.out.println("- POST /api/cart/add - Ajouter au panier");
-        System.out.println("- GET /api/cart/{cartId} - Voir le panier");
-        System.out.println("- POST /api/cart/{cartId}/order - Commander le panier");
-        System.out.println("- POST /api/order/{orderId}/pay - Payer la commande");
+    static {
+        products.add(Map.of("id", 1, "name", "Laptop", "description", "A powerful laptop", "price", 1200.0, "stockQuantity", 10));
+        products.add(Map.of("id", 2, "name", "Smartphone", "description", "A modern smartphone", "price", 800.0, "stockQuantity", 20));
+        products.add(Map.of("id", 3, "name", "Headphones", "description", "Noise-cancelling headphones", "price", 150.0, "stockQuantity", 15));
+        users.add(Map.of("id", 1, "email", "john@example.com", "password", "123"));
     }
 
-    private static void setupRoutes(Javalin app) {
-        
-        // Route pour lister tous les produits disponibles
-        app.get("/api/products", ShopApiController::getProducts);
-        
-        // Route pour créer un nouveau panier
-        app.post("/api/cart/create", ShopApiController::createCart);
-        
-        // Route pour ajouter un produit au panier
-        app.post("/api/cart/add", ShopApiController::addToCart);
-        
-        // Route pour voir le contenu d'un panier
-        app.get("/api/cart/{cartId}", ShopApiController::getCart);
-        
-        // Route pour passer commande du panier
-        app.post("/api/cart/{cartId}/order", ShopApiController::createOrder);
-        
-        // Route pour payer une commande
-        app.post("/api/order/{orderId}/pay", ShopApiController::payOrder);
-        
-        // Route pour voir une commande
-        app.get("/api/order/{orderId}", ShopApiController::getOrder);
+    @GetMapping("/products")
+    public List<Map<String, Object>> getProducts() {
+        return products;
     }
 
-    /**
-     * GET /api/products - Liste tous les produits disponibles
-     */
-    private static void getProducts(Context ctx) {
-        List<Product> products = new ArrayList<>();
-        for (ProductCatalog productEnum : ProductCatalog.values()) {
-            products.add(productEnum.toProduct());
-        }
-        ctx.json(products);
+    @PostMapping("/cart/add")
+    public Map<String, Object> addToCart(@RequestBody Map<String, Object> body) {
+        int cartId = body.get("cartId") == null ? cartIdSeq++ : ((Number) body.get("cartId")).intValue();
+        int productId = ((Number) body.get("productId")).intValue();
+        int quantity = ((Number) body.get("quantity")).intValue();
+        Map<String, Object> product = products.stream().filter(p -> ((Number)p.get("id")).intValue() == productId).findFirst().orElse(null);
+        if (product == null) return Map.of("error", "Produit non trouvé");
+        List<Map<String, Object>> cart = carts.computeIfAbsent(cartId, k -> new ArrayList<>());
+        for (int i = 0; i < quantity; i++) cart.add(product);
+        return Map.of(
+            "cartId", cartId,
+            "message", "Produit ajouté au panier",
+            "cartTotal", cart.stream().mapToDouble(p -> ((Number)p.get("price")).doubleValue()).sum(),
+            "itemsCount", cart.size()
+        );
     }
 
-    /**
-     * POST /api/cart/create - Crée un nouveau panier
-     */
-    private static void createCart(Context ctx) {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setId(cartIdGenerator.getAndIncrement());
-        cart.setUser(UserConstants.DEFAULT_CUSTOMER);
-        
-        carts.put(cart.getId(), cart);
-        
-        ctx.json(Map.of(
-            "cartId", cart.getId(),
-            "message", "Panier créé avec succès"
-        ));
+    @GetMapping("/cart/{cartId}")
+    public Map<String, Object> getCart(@Parameter(description = "ID du panier", required = true) @PathVariable int cartId) {
+        List<Map<String, Object>> cart = carts.get(cartId);
+        if (cart == null) return Map.of("error", "Panier non trouvé");
+        return Map.of(
+            "cartId", cartId,
+            "products", cart,
+            "total", cart.stream().mapToDouble(p -> ((Number)p.get("price")).doubleValue()).sum(),
+            "itemsCount", cart.size()
+        );
     }
 
-    /**
-     * POST /api/cart/add - Ajoute un produit au panier
-     * Body: {"cartId": 1, "productId": 1, "quantity": 2}
-     */
-    private static void addToCart(Context ctx) {
-        try {
-            Map<String, Object> body = ctx.bodyAsClass(Map.class);
-            int cartId = ((Number) body.get("cartId")).intValue();
-            int productId = ((Number) body.get("productId")).intValue();
-            int quantity = ((Number) body.get("quantity")).intValue();
-
-            ShoppingCart cart = carts.get(cartId);
-            if (cart == null) {
-                ctx.status(404).json(Map.of("error", "Panier non trouvé"));
-                return;
-            }
-
-            // Trouver le produit par ID
-            Product product = findProductById(productId);
-            if (product == null) {
-                ctx.status(404).json(Map.of("error", "Produit non trouvé"));
-                return;
-            }
-
-            cart.addProduct(product, quantity);
-            
-            ctx.json(Map.of(
-                "message", "Produit ajouté au panier",
-                "cartTotal", cart.calculateTotal(),
-                "itemsCount", cart.getProducts().size()
-            ));
-            
-        } catch (Exception e) {
-            ctx.status(400).json(Map.of("error", "Données invalides"));
-        }
-    }
-
-    /**
-     * GET /api/cart/{cartId} - Affiche le contenu du panier
-     */
-    private static void getCart(Context ctx) {
-        int cartId = Integer.parseInt(ctx.pathParam("cartId"));
-        ShoppingCart cart = carts.get(cartId);
-        
-        if (cart == null) {
-            ctx.status(404).json(Map.of("error", "Panier non trouvé"));
-            return;
-        }
-
-        ctx.json(Map.of(
-            "cartId", cart.getId(),
-            "products", cart.getProducts(),
-            "total", cart.calculateTotal(),
-            "itemsCount", cart.getProducts().size()
-        ));
-    }
-
-    /**
-     * POST /api/cart/{cartId}/order - Transforme le panier en commande
-     */
-    private static void createOrder(Context ctx) {
-        int cartId = Integer.parseInt(ctx.pathParam("cartId"));
-        ShoppingCart cart = carts.get(cartId);
-        
-        if (cart == null) {
-            ctx.status(404).json(Map.of("error", "Panier non trouvé"));
-            return;
-        }
-
-        if (cart.getProducts().isEmpty()) {
-            ctx.status(400).json(Map.of("error", "Le panier est vide"));
-            return;
-        }
-
-        // Créer la commande
-        Order order = new Order();
-        order.setOrderId(orderIdGenerator.getAndIncrement());
-        order.setUser(cart.getUser());
-        order.setProducts(new ArrayList<>(cart.getProducts()));
-        order.setStatus("confirmed");
-        
-        orders.put(order.getOrderId(), order);
-        
-        // Vider le panier
-        cart.getProducts().clear();
-        
-        ctx.json(Map.of(
-            "orderId", order.getOrderId(),
+    @PostMapping("/cart/{cartId}/order")
+    public Map<String, Object> createOrder(@PathVariable int cartId) {
+        List<Map<String, Object>> cart = carts.get(cartId);
+        if (cart == null || cart.isEmpty()) return Map.of("error", "Panier non trouvé ou vide");
+        int orderId = orderIdSeq++;
+        Map<String, Object> order = new HashMap<>();
+        order.put("orderId", orderId);
+        order.put("products", new ArrayList<>(cart));
+        order.put("status", "confirmed");
+        order.put("total", cart.stream().mapToDouble(p -> ((Number)p.get("price")).doubleValue()).sum());
+        orders.put(orderId, order);
+        cart.clear();
+        return Map.of(
+            "orderId", orderId,
             "message", "Commande créée avec succès",
-            "total", order.getTotalAmount(),
-            "status", order.getStatus()
-        ));
+            "total", order.get("total"),
+            "status", order.get("status")
+        );
     }
 
-    /**
-     * POST /api/order/{orderId}/pay - Effectue le paiement d'une commande
-     * Body: {"method": "card", "cardNumber": "1234567890123456", "expiry": "12/25", "cvv": "123"}
-     */
-    private static void payOrder(Context ctx) {
-        try {
-            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
-            Order order = orders.get(orderId);
-            
-            if (order == null) {
-                ctx.status(404).json(Map.of("error", "Commande non trouvée"));
-                return;
-            }
-
-            Map<String, Object> paymentData = ctx.bodyAsClass(Map.class);
-            String method = (String) paymentData.get("method");
-            String cardNumber = (String) paymentData.get("cardNumber");
-            String expiry = (String) paymentData.get("expiry");
-            String cvv = (String) paymentData.get("cvv");
-
-            // Créer le paiement
-            Payment payment = new Payment();
-            payment.setPaymentId(paymentIdGenerator.getAndIncrement());
-            payment.setAmount(order.getTotalAmount());
-            payment.setMethod(method);
-            payment.setOrder(order);
-
-            // Valider les données de carte
-            if (!payment.validateOrder(cardNumber, expiry, cvv)) {
-                ctx.status(400).json(Map.of("error", "Informations de carte invalides"));
-                return;
-            }
-
-            // Traiter le paiement
-            if (payment.processPayment()) {
-                order.updateStatus("paid");
-                payments.put(payment.getPaymentId(), payment);
-                
-                ctx.json(Map.of(
-                    "paymentId", payment.getPaymentId(),
-                    "message", "Paiement effectué avec succès",
-                    "amount", payment.getAmount(),
-                    "status", payment.getStatus()
-                ));
-            } else {
-                ctx.status(500).json(Map.of("error", "Échec du paiement"));
-            }
-            
-        } catch (Exception e) {
-            ctx.status(400).json(Map.of("error", "Données de paiement invalides"));
+    @PostMapping("/order/{orderId}/pay")
+    public Map<String, Object> payOrder(@PathVariable int orderId, @RequestBody Map<String, Object> paymentData) {
+        Map<String, Object> order = orders.get(orderId);
+        if (order == null) return Map.of("error", "Commande non trouvée");
+        // Simule le paiement
+        if (paymentData.get("cardNumber") == null || paymentData.get("expiry") == null || paymentData.get("cvv") == null) {
+            return Map.of("error", "Informations de carte invalides");
         }
+        order.put("status", "paid");
+        return Map.of(
+            "paymentId", paymentIdSeq++,
+            "message", "Paiement effectué avec succès",
+            "amount", order.get("total"),
+            "status", order.get("status")
+        );
     }
 
-    /**
-     * GET /api/order/{orderId} - Affiche les détails d'une commande
-     */
-    private static void getOrder(Context ctx) {
-        int orderId = Integer.parseInt(ctx.pathParam("orderId"));
-        Order order = orders.get(orderId);
-        
-        if (order == null) {
-            ctx.status(404).json(Map.of("error", "Commande non trouvée"));
-            return;
-        }
-
-        ctx.json(Map.of(
-            "orderId", order.getOrderId(),
-            "status", order.getStatus(),
-            "products", order.getProducts(),
-            "total", order.getTotalAmount(),
-            "summary", order.getOrderSummary(),
-            "date", order.getDate()
-        ));
+    @PostMapping("/auth/login")
+    public Map<String, String> login(@RequestBody Map<String, String> credentials) {
+        return users.stream().anyMatch(u -> u.get("email").equals(credentials.get("email")) && u.get("password").equals(credentials.get("password")))
+            ? Map.of("message", "Authentification réussie")
+            : Map.of("error", "Identifiants invalides");
     }
-
-    /**
-     * Recherche un produit par son ID dans le ProductCatalog
-     */
-    private static Product findProductById(int id) {
-        for (ProductCatalog pc : ProductCatalog.values()) {
-            if (pc.ordinal() + 1 == id) {
-                return pc.toProduct();
-            }
-        }
-        return null;
-    }
-
-} // fin classe
+}

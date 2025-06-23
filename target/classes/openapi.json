@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ShopMax API",
+    "version": "1.0.0",
+    "description": "POC API for ShopMax (mock, no DB)"
+  },
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "List all products",
+        "responses": {
+          "200": {
+            "description": "A list of products",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart/add": {
+      "post": {
+        "summary": "Add product to cart",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cartId": { "type": "integer" },
+                  "productId": { "type": "integer" },
+                  "quantity": { "type": "integer" }
+                },
+                "required": ["cartId", "productId", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Product added to cart" },
+          "400": { "description": "Invalid data" },
+          "404": { "description": "Cart or product not found" }
+        }
+      }
+    },
+    "/api/cart/{cartId}": {
+      "get": {
+        "summary": "Get cart by ID",
+        "parameters": [
+          { "name": "cartId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Cart details" },
+          "404": { "description": "Cart not found" }
+        }
+      }
+    },
+    "/api/cart/{cartId}/order": {
+      "post": {
+        "summary": "Create order from cart",
+        "parameters": [
+          { "name": "cartId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Order created" },
+          "400": { "description": "Cart empty" },
+          "404": { "description": "Cart not found" }
+        }
+      }
+    },
+    "/api/order/{orderId}/pay": {
+      "post": {
+        "summary": "Pay for an order",
+        "parameters": [
+          { "name": "orderId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "method": { "type": "string" },
+                  "cardNumber": { "type": "string" },
+                  "expiry": { "type": "string" },
+                  "cvv": { "type": "string" }
+                },
+                "required": ["method", "cardNumber", "expiry", "cvv"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Payment successful" },
+          "400": { "description": "Invalid payment data" },
+          "404": { "description": "Order not found" },
+          "500": { "description": "Payment failed" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Authenticate user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authentication successful" },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number", "format": "float" },
+          "stockQuantity": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

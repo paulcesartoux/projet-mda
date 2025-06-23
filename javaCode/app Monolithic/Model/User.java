@@ -1,4 +1,6 @@
 
+import java.io.*;
+import java.util.*;
 
 /**
  * 
@@ -39,13 +41,8 @@ public class User {
      * Description: Vérifie l'identité de l'utilisateur pour la connexion
      */
     public Boolean authenticate(String email, String password) {
-        if (email == null || password == null) {
-            return false;
-        }
-        if (this.email != null && this.email.equals(email) && password.length() >= 6) {
-            return true;
-        }
-        return false;
+        // TODO implement here
+        return null;
     }
 
 }

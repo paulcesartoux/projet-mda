@@ -8,5 +8,5 @@ class User:
         self.lastName = None
         self.email = None
 
-    def getFullName(self, firstName, lastName):
+    def authenticate(self, email, password):
         pass

@@ -7,3 +7,7 @@ class Payment:
         self.amount = None
         self.method = None
         self.status = None
+        self.order = None
+
+    def sendPayment(self, ):
+        pass

@@ -1,13 +1,10 @@
-com\shopmax\controller\SimpleShopController.class
+com\shopmax\model\MockDatabase.class
 com\shopmax\model\Customer.class
 com\shopmax\model\Payment.class
-com\shopmax\ShopMaxApplication.class
-com\shopmax\model\ProductEnum.class
 com\shopmax\model\Admin.class
 com\shopmax\model\Product.class
 com\shopmax\model\User.class
 com\shopmax\controller\ShopApiController.class
-com\shopmax\model\UserConstants.class
 com\shopmax\model\Order.class
 com\shopmax\model\ShoppingCart.class
 com\shopmax\model\ProductCatalog.class

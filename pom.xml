@@ -21,11 +21,18 @@
         <junit.version>5.9.2</junit.version>
     </properties>
       <dependencies>
-        <!-- Javalin for REST API -->
+        <!-- Spring Boot Starter Web -->
         <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>5.6.3</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.2.6</version>
+        </dependency>
+        
+        <!-- springdoc-openapi for OpenAPI and Swagger UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
         </dependency>
         
         <!-- JSON processing -->
@@ -58,47 +65,11 @@
     </dependencies>
     <build>
       <plugins>
-        <!-- Maven Compiler Plugin -->
+        <!-- Spring Boot Maven Plugin -->
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
-            <configuration>
-                <source>17</source>
-                <target>17</target>
-            </configuration>
-        </plugin>
-        
-        <!-- Maven Surefire Plugin for running tests -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.1.2</version>
-        </plugin>
-        
-        <!-- Maven JAR Plugin -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.3.0</version>
-          <configuration>
-            <archive>
-              <manifest>
-                <!-- Main class for exec:java -->
-                <mainClass>com.shopmax.controller.ShopApiController</mainClass>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-        
-        <!-- Exec Maven Plugin pour démarrer l'application -->
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>3.1.0</version>
-          <configuration>
-            <mainClass>com.shopmax.controller.ShopApiController</mainClass>
-          </configuration>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>3.2.6</version>
         </plugin>
       </plugins>
     </build>

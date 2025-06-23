@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from user import User
+from User import User
 
 
 class Admin(User):

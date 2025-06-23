@@ -8,3 +8,9 @@ class Product:
         self.description = None
         self.price = None
         self.stockQuantity = None
+
+    def isAvailable(self, ):
+        pass
+
+    def updateStock(self, quantity):
+        pass

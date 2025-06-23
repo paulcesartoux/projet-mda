@@ -154,7 +154,7 @@
 											"top": 1046,
 											"width": 332.24609375,
 											"height": 13,
-											"text": "+id: int",
+											"text": "+id",
 											"horizontalAlignment": 0
 										},
 										{
@@ -172,7 +172,7 @@
 											"top": 1061,
 											"width": 332.24609375,
 											"height": 13,
-											"text": "+firstame: string",
+											"text": "+firstame",
 											"horizontalAlignment": 0
 										},
 										{
@@ -190,7 +190,7 @@
 											"top": 1076,
 											"width": 332.24609375,
 											"height": 13,
-											"text": "+lastName: string",
+											"text": "+lastName",
 											"horizontalAlignment": 0
 										},
 										{
@@ -208,7 +208,7 @@
 											"top": 1091,
 											"width": 332.24609375,
 											"height": 13,
-											"text": "+email: string",
+											"text": "+email",
 											"horizontalAlignment": 0
 										}
 									],
@@ -414,7 +414,7 @@
 											"top": 1134,
 											"width": 86.9345703125,
 											"height": 13,
-											"text": "+adress: string",
+											"text": "+adress",
 											"horizontalAlignment": 0
 										}
 									],
@@ -804,7 +804,7 @@
 											"top": 1278,
 											"width": 96.7607421875,
 											"height": 13,
-											"text": "+id: int",
+											"text": "+id",
 											"horizontalAlignment": 0
 										},
 										{
@@ -822,7 +822,7 @@
 											"top": 1293,
 											"width": 96.7607421875,
 											"height": 13,
-											"text": "+createdAt: date",
+											"text": "+createdA",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1028,7 +1028,7 @@
 											"top": 1326,
 											"width": 82.2880859375,
 											"height": 13,
-											"text": "+orderId: int",
+											"text": "+orderId",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1046,7 +1046,7 @@
 											"top": 1341,
 											"width": 82.2880859375,
 											"height": 13,
-											"text": "+date: date",
+											"text": "+date",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1064,7 +1064,7 @@
 											"top": 1356,
 											"width": 82.2880859375,
 											"height": 13,
-											"text": "+status: string",
+											"text": "+status",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1267,7 +1267,7 @@
 											"top": 1422,
 											"width": 110.4716796875,
 											"height": 13,
-											"text": "+id: int",
+											"text": "+id",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1285,7 +1285,7 @@
 											"top": 1437,
 											"width": 110.4716796875,
 											"height": 13,
-											"text": "+name: string",
+											"text": "+name",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1303,7 +1303,7 @@
 											"top": 1452,
 											"width": 110.4716796875,
 											"height": 13,
-											"text": "+description: string",
+											"text": "+description",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1321,7 +1321,7 @@
 											"top": 1467,
 											"width": 110.4716796875,
 											"height": 13,
-											"text": "+price: float",
+											"text": "+price",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1339,7 +1339,7 @@
 											"top": 1482,
 											"width": 110.4716796875,
 											"height": 13,
-											"text": "+stockQuantity: int",
+											"text": "+stockQuantity",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1543,7 +1543,7 @@
 											"top": 1478,
 											"width": 90.96533203125,
 											"height": 13,
-											"text": "+paymentId: int",
+											"text": "+paymentId",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1561,7 +1561,7 @@
 											"top": 1493,
 											"width": 90.96533203125,
 											"height": 13,
-											"text": "+amount: float",
+											"text": "+amount",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1579,7 +1579,7 @@
 											"top": 1508,
 											"width": 90.96533203125,
 											"height": 13,
-											"text": "+method: string",
+											"text": "+method",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1597,7 +1597,7 @@
 											"top": 1523,
 											"width": 90.96533203125,
 											"height": 13,
-											"text": "+status: string",
+											"text": "+status",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3359,8 +3359,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCXzVQ="
 							},
-							"name": "adress",
-							"type": "string"
+							"name": "adress"
 						}
 					]
 				},
@@ -3378,8 +3377,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCd7vc="
 							},
-							"name": "id",
-							"type": "int"
+							"name": "id"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3387,8 +3385,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCd7vc="
 							},
-							"name": "firstame",
-							"type": "string"
+							"name": "firstame"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3396,8 +3393,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCd7vc="
 							},
-							"name": "lastName",
-							"type": "string"
+							"name": "lastName"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3405,8 +3401,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCd7vc="
 							},
-							"name": "email",
-							"type": "string"
+							"name": "email"
 						}
 					]
 				},
@@ -3478,8 +3473,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCk6Uc="
 							},
-							"name": "id",
-							"type": "int"
+							"name": "id"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3487,8 +3481,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCk6Uc="
 							},
-							"name": "createdAt",
-							"type": "date"
+							"name": "createdA"
 						}
 					]
 				},
@@ -3566,8 +3559,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCqf7M="
 							},
-							"name": "orderId",
-							"type": "int"
+							"name": "orderId"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3575,8 +3567,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCqf7M="
 							},
-							"name": "date",
-							"type": "date"
+							"name": "date"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3584,8 +3575,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDCqf7M="
 							},
-							"name": "status",
-							"type": "string"
+							"name": "status"
 						}
 					]
 				},
@@ -3634,8 +3624,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDC0lNE="
 							},
-							"name": "id",
-							"type": "int"
+							"name": "id"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3643,8 +3632,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDC0lNE="
 							},
-							"name": "name",
-							"type": "string"
+							"name": "name"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3652,8 +3640,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDC0lNE="
 							},
-							"name": "description",
-							"type": "string"
+							"name": "description"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3661,8 +3648,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDC0lNE="
 							},
-							"name": "price",
-							"type": "float"
+							"name": "price"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3670,8 +3656,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZDC0lNE="
 							},
-							"name": "stockQuantity",
-							"type": "int"
+							"name": "stockQuantity"
 						}
 					]
 				},
@@ -3689,8 +3674,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZTC9+0Y="
 							},
-							"name": "paymentId",
-							"type": "int"
+							"name": "paymentId"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3698,8 +3682,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZTC9+0Y="
 							},
-							"name": "amount",
-							"type": "float"
+							"name": "amount"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3707,8 +3690,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZTC9+0Y="
 							},
-							"name": "method",
-							"type": "string"
+							"name": "method"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -3716,8 +3698,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGXmS2tZTC9+0Y="
 							},
-							"name": "status",
-							"type": "string"
+							"name": "status"
 						}
 					]
 				}

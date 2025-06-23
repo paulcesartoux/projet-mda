@@ -1,14 +1,11 @@
 package com.shopmax;
 
-import com.shopmax.controller.SimpleShopController;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Application principale ShopMax
- */
+@SpringBootApplication
 public class ShopMaxApplication {
-    
     public static void main(String[] args) {
-        System.out.println("=== Démarrage de ShopMax API ===");
-        SimpleShopController.main(args);
+        SpringApplication.run(ShopMaxApplication.class, args);
     }
 }
